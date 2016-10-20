@@ -39,13 +39,6 @@ positionsToCheck cells =
     cells ++ List.concatMap possibleNeighbours cells
 
 
-unique : List comparable -> List comparable
-unique list =
-    list
-        |> Set.fromList
-        |> Set.toList
-
-
 updatePosition : Set Position -> Position -> Maybe Position
 updatePosition cells position =
     let
