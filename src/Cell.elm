@@ -1,6 +1,6 @@
 module Cell exposing (..)
 
-import Set
+import Set exposing (Set)
 
 
 type alias Position =
@@ -17,7 +17,7 @@ type alias NeighbourCount =
 
 
 type alias Model =
-    { cells : List Position }
+    { cells : Set Position }
 
 
 updateModel : Model -> Model
@@ -25,13 +25,15 @@ updateModel model =
     { cells = updatePositions model.cells }
 
 
-updatePositions : List Position -> List Position
+updatePositions : Set Position -> Set Position
 updatePositions cells =
-    List.filterMap
-        (\position ->
-            updatePosition cells position (List.length (neighbours cells position))
+    Set.fromList
+        (List.filterMap
+            (\position ->
+                updatePosition (Set.toList cells) position (List.length (neighbours (Set.toList cells) position))
+            )
+            (positionsToCheck (Set.toList cells))
         )
-        (positionsToCheck cells)
 
 
 positionsToCheck : List Position -> List Position

@@ -2,6 +2,7 @@ module Tests exposing (..)
 
 import Test exposing (..)
 import Expect
+import Set
 import Cell exposing (..)
 
 
@@ -15,8 +16,8 @@ all =
         , test "update creates new cells for positions with three neighbours" <|
             \() ->
                 Expect.equal
-                    { cells = [ ( 1, 1 ), ( 0, 1 ) ] }
-                    (updateModel { cells = [ ( 1, 2 ), ( 1, 0 ), ( 0, 1 ) ] })
+                    { cells = Set.fromList [ ( 1, 1 ), ( 0, 1 ) ] }
+                    (updateModel { cells = Set.fromList [ ( 1, 2 ), ( 1, 0 ), ( 0, 1 ) ] })
         ]
 
 

@@ -70,17 +70,22 @@ var _user$project$Cell$positionsToCheck = function (cells) {
 			A2(_elm_lang$core$List$concatMap, _user$project$Cell$possibleNeighbours, cells)));
 };
 var _user$project$Cell$updatePositions = function (cells) {
-	return A2(
-		_elm_lang$core$List$filterMap,
-		function (position) {
-			return A3(
-				_user$project$Cell$updatePosition,
-				cells,
-				position,
-				_elm_lang$core$List$length(
-					A2(_user$project$Cell$neighbours, cells, position)));
-		},
-		_user$project$Cell$positionsToCheck(cells));
+	return _elm_lang$core$Set$fromList(
+		A2(
+			_elm_lang$core$List$filterMap,
+			function (position) {
+				return A3(
+					_user$project$Cell$updatePosition,
+					_elm_lang$core$Set$toList(cells),
+					position,
+					_elm_lang$core$List$length(
+						A2(
+							_user$project$Cell$neighbours,
+							_elm_lang$core$Set$toList(cells),
+							position)));
+			},
+			_user$project$Cell$positionsToCheck(
+				_elm_lang$core$Set$toList(cells))));
 };
 var _user$project$Cell$updateModel = function (model) {
 	return {
