@@ -57,7 +57,9 @@ updatePosition cells position =
 
 neighbours : Set Position -> Position -> Set Position
 neighbours cells position =
-    Set.filter (isCellAt cells) (Set.fromList (possibleNeighbours position))
+    possibleNeighbours position
+        |> Set.fromList
+        |> Set.filter (isCellAt cells)
 
 
 possibleNeighbours : Position -> List Position
