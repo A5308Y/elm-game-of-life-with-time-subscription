@@ -1,3 +1,5 @@
+var _user$project$Main$xOffset = 200;
+var _user$project$Main$yOffset = 200;
 var _user$project$Main$cellSize = 5;
 var _user$project$Main$displayCell = function (cell) {
 	return A2(
@@ -6,10 +8,10 @@ var _user$project$Main$displayCell = function (cell) {
 			[
 				_elm_lang$svg$Svg_Attributes$x(
 				_elm_lang$core$Basics$toString(
-					_elm_lang$core$Basics$fst(cell) * _user$project$Main$cellSize)),
+					_user$project$Main$xOffset + (_elm_lang$core$Basics$fst(cell) * _user$project$Main$cellSize))),
 				_elm_lang$svg$Svg_Attributes$y(
 				_elm_lang$core$Basics$toString(
-					_elm_lang$core$Basics$snd(cell) * _user$project$Main$cellSize)),
+					_user$project$Main$yOffset + (_elm_lang$core$Basics$snd(cell) * _user$project$Main$cellSize))),
 				_elm_lang$svg$Svg_Attributes$width(
 				_elm_lang$core$Basics$toString(_user$project$Main$cellSize)),
 				_elm_lang$svg$Svg_Attributes$height(
@@ -47,8 +49,7 @@ var _user$project$Main$view = function (model) {
 				_elm_lang$core$Native_List.fromArray(
 					[
 						_elm_lang$svg$Svg_Attributes$width('600'),
-						_elm_lang$svg$Svg_Attributes$height('600'),
-						_elm_lang$svg$Svg_Attributes$viewBox('0 0 200 200')
+						_elm_lang$svg$Svg_Attributes$height('600')
 					]),
 				A2(
 					_elm_lang$core$List$map,

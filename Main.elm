@@ -39,7 +39,7 @@ view model =
     div []
         [ button [ onClick Tick ] [ Html.text "Tick" ]
         , svg
-            [ width "600", height "600", viewBox "0 0 200 200" ]
+            [ width "600", height "600" ]
             (List.map displayCell (Set.toList model.cells))
         ]
 
@@ -49,11 +49,21 @@ cellSize =
     5
 
 
+yOffset : Int
+yOffset =
+    200
+
+
+xOffset : Int
+xOffset =
+    200
+
+
 displayCell : Position -> Svg msg
 displayCell cell =
     rect
-        [ x (toString (fst cell * cellSize))
-        , y (toString (snd cell * cellSize))
+        [ x (toString (xOffset + fst cell * cellSize))
+        , y (toString (yOffset + snd cell * cellSize))
         , width (toString cellSize)
         , height (toString cellSize)
         ]

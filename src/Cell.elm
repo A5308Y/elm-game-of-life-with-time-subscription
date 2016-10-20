@@ -10,7 +10,6 @@ type alias Position =
 
 
 --Cell as position with neighbourCount?
---SetOfCells instead of a list? as position with neighbourCount?
 
 
 type alias NeighbourCount =
