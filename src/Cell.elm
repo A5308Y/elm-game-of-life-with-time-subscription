@@ -1,7 +1,7 @@
 module Cell exposing (..)
 
 import Set exposing (Set)
-import CellInit exposing (cells)
+import CellInit exposing (cells, altCells)
 
 
 type alias Position =
@@ -9,11 +9,8 @@ type alias Position =
 
 
 
---Cell as position with neighbourCount?
-
-
-type alias NeighbourCount =
-    Int
+-- Cell as position with neighbourCount?
+-- Use Set functions instead of converting
 
 
 type alias Model =
@@ -22,7 +19,7 @@ type alias Model =
 
 initModel : Model
 initModel =
-    { cells = Set.fromList CellInit.cells }
+    { cells = Set.fromList CellInit.altCells }
 
 
 updateModel : Model -> Model
@@ -32,13 +29,9 @@ updateModel model =
 
 updatePositions : Set Position -> Set Position
 updatePositions cells =
-    Set.fromList
-        (List.filterMap
-            (\position ->
-                updatePosition (Set.toList cells) position (List.length (neighbours (Set.toList cells) position))
-            )
-            (positionsToCheck (Set.toList cells))
-        )
+    positionsToCheck (Set.toList cells)
+        |> List.filterMap (\position -> updatePosition cells position)
+        |> Set.fromList
 
 
 positionsToCheck : List Position -> List Position
@@ -53,21 +46,25 @@ unique list =
         |> Set.toList
 
 
-updatePosition : List Position -> Position -> NeighbourCount -> Maybe Position
-updatePosition cells position neighbourCount =
-    if neighbourCount < 2 then
-        Nothing
-    else if neighbourCount == 3 then
-        Just position
-    else if neighbourCount == 2 && isCellAt cells position then
-        Just position
-    else
-        Nothing
+updatePosition : Set Position -> Position -> Maybe Position
+updatePosition cells position =
+    let
+        neighbourCount =
+            List.length (neighbours cells position)
+    in
+        if neighbourCount < 2 then
+            Nothing
+        else if neighbourCount == 3 then
+            Just position
+        else if neighbourCount == 2 && isCellAt cells position then
+            Just position
+        else
+            Nothing
 
 
-neighbours : List Position -> Position -> List Position
-neighbours cellList position =
-    List.filter (isCellAt cellList) (possibleNeighbours position)
+neighbours : Set Position -> Position -> List Position
+neighbours cells position =
+    List.filter (isCellAt cells) (possibleNeighbours position)
 
 
 possibleNeighbours : Position -> List Position
@@ -88,6 +85,6 @@ addPosition leftPosition rightPosition =
     ( fst leftPosition + fst rightPosition, snd leftPosition + snd rightPosition )
 
 
-isCellAt : List Position -> Position -> Bool
-isCellAt model position =
-    List.member position model
+isCellAt : Set Position -> Position -> Bool
+isCellAt cells position =
+    Set.member position cells

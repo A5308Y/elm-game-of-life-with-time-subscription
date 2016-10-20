@@ -4172,6 +4172,56 @@ var _elm_lang$core$Set$partition = F2(
 			_1: _elm_lang$core$Set$Set_elm_builtin(p2)
 		};
 	});
+var _user$project$CellInit$altCells = _elm_lang$core$Native_List.fromArray(
+	[
+		{ctor: '_Tuple2', _0: 1, _1: 14},
+		{ctor: '_Tuple2', _0: 1, _1: 20},
+		{ctor: '_Tuple2', _0: 10, _1: 4},
+		{ctor: '_Tuple2', _0: 10, _1: 6},
+		{ctor: '_Tuple2', _0: 10, _1: 7},
+		{ctor: '_Tuple2', _0: 10, _1: 9},
+		{ctor: '_Tuple2', _0: 11, _1: 17},
+		{ctor: '_Tuple2', _0: 11, _1: 20},
+		{ctor: '_Tuple2', _0: 11, _1: 5},
+		{ctor: '_Tuple2', _0: 12, _1: 14},
+		{ctor: '_Tuple2', _0: 12, _1: 16},
+		{ctor: '_Tuple2', _0: 12, _1: 4},
+		{ctor: '_Tuple2', _0: 13, _1: 11},
+		{ctor: '_Tuple2', _0: 13, _1: 2},
+		{ctor: '_Tuple2', _0: 14, _1: 20},
+		{ctor: '_Tuple2', _0: 15, _1: 13},
+		{ctor: '_Tuple2', _0: 15, _1: 5},
+		{ctor: '_Tuple2', _0: 16, _1: 12},
+		{ctor: '_Tuple2', _0: 16, _1: 13},
+		{ctor: '_Tuple2', _0: 17, _1: 11},
+		{ctor: '_Tuple2', _0: 17, _1: 7},
+		{ctor: '_Tuple2', _0: 17, _1: 9},
+		{ctor: '_Tuple2', _0: 18, _1: 16},
+		{ctor: '_Tuple2', _0: 19, _1: 11},
+		{ctor: '_Tuple2', _0: 19, _1: 8},
+		{ctor: '_Tuple2', _0: 2, _1: 13},
+		{ctor: '_Tuple2', _0: 2, _1: 17},
+		{ctor: '_Tuple2', _0: 20, _1: 14},
+		{ctor: '_Tuple2', _0: 20, _1: 15},
+		{ctor: '_Tuple2', _0: 20, _1: 18},
+		{ctor: '_Tuple2', _0: 20, _1: 8},
+		{ctor: '_Tuple2', _0: 4, _1: 19},
+		{ctor: '_Tuple2', _0: 4, _1: 20},
+		{ctor: '_Tuple2', _0: 5, _1: 12},
+		{ctor: '_Tuple2', _0: 5, _1: 16},
+		{ctor: '_Tuple2', _0: 5, _1: 2},
+		{ctor: '_Tuple2', _0: 5, _1: 20},
+		{ctor: '_Tuple2', _0: 6, _1: 12},
+		{ctor: '_Tuple2', _0: 6, _1: 13},
+		{ctor: '_Tuple2', _0: 7, _1: 12},
+		{ctor: '_Tuple2', _0: 8, _1: 17},
+		{ctor: '_Tuple2', _0: 9, _1: 10},
+		{ctor: '_Tuple2', _0: 9, _1: 13},
+		{ctor: '_Tuple2', _0: 9, _1: 14},
+		{ctor: '_Tuple2', _0: 9, _1: 16},
+		{ctor: '_Tuple2', _0: 9, _1: 18},
+		{ctor: '_Tuple2', _0: 9, _1: 20}
+	]);
 var _user$project$CellInit$cells = _elm_lang$core$Native_List.fromArray(
 	[
 		{ctor: '_Tuple2', _0: 1, _1: 14},
@@ -4227,8 +4277,8 @@ var _user$project$CellInit$cells = _elm_lang$core$Native_List.fromArray(
 		{ctor: '_Tuple2', _0: 9, _1: 20}
 	]);
 var _user$project$Cell$isCellAt = F2(
-	function (model, position) {
-		return A2(_elm_lang$core$List$member, position, model);
+	function (cells, position) {
+		return A2(_elm_lang$core$Set$member, position, cells);
 	});
 var _user$project$Cell$addPosition = F2(
 	function (leftPosition, rightPosition) {
@@ -4276,14 +4326,16 @@ var _user$project$Cell$possibleNeighbours = function (position) {
 		]);
 };
 var _user$project$Cell$neighbours = F2(
-	function (cellList, position) {
+	function (cells, position) {
 		return A2(
 			_elm_lang$core$List$filter,
-			_user$project$Cell$isCellAt(cellList),
+			_user$project$Cell$isCellAt(cells),
 			_user$project$Cell$possibleNeighbours(position));
 	});
-var _user$project$Cell$updatePosition = F3(
-	function (cells, position, neighbourCount) {
+var _user$project$Cell$updatePosition = F2(
+	function (cells, position) {
+		var neighbourCount = _elm_lang$core$List$length(
+			A2(_user$project$Cell$neighbours, cells, position));
 		return (_elm_lang$core$Native_Utils.cmp(neighbourCount, 2) < 0) ? _elm_lang$core$Maybe$Nothing : (_elm_lang$core$Native_Utils.eq(neighbourCount, 3) ? _elm_lang$core$Maybe$Just(position) : ((_elm_lang$core$Native_Utils.eq(neighbourCount, 2) && A2(_user$project$Cell$isCellAt, cells, position)) ? _elm_lang$core$Maybe$Just(position) : _elm_lang$core$Maybe$Nothing));
 	});
 var _user$project$Cell$unique = function (list) {
@@ -4302,15 +4354,7 @@ var _user$project$Cell$updatePositions = function (cells) {
 		A2(
 			_elm_lang$core$List$filterMap,
 			function (position) {
-				return A3(
-					_user$project$Cell$updatePosition,
-					_elm_lang$core$Set$toList(cells),
-					position,
-					_elm_lang$core$List$length(
-						A2(
-							_user$project$Cell$neighbours,
-							_elm_lang$core$Set$toList(cells),
-							position)));
+				return A2(_user$project$Cell$updatePosition, cells, position);
 			},
 			_user$project$Cell$positionsToCheck(
 				_elm_lang$core$Set$toList(cells))));
@@ -4321,7 +4365,7 @@ var _user$project$Cell$updateModel = function (model) {
 	};
 };
 var _user$project$Cell$initModel = {
-	cells: _elm_lang$core$Set$fromList(_user$project$CellInit$cells)
+	cells: _elm_lang$core$Set$fromList(_user$project$CellInit$altCells)
 };
 var _user$project$Cell$Model = function (a) {
 	return {cells: a};

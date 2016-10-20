@@ -7,37 +7,39 @@ import Html.Events exposing (..)
 import Html.App as Html
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
+import Time exposing (Time)
 
 
 type Msg
-    = Tick
+    = Tick Time
 
 
 main : Program Never
 main =
-    Html.beginnerProgram
-        { model = initModel
+    Html.program
+        { init = initModel
         , view = view
         , update = update
+        , subscriptions = subscriptions
         }
 
 
-initModel : Model
+initModel : ( Model, Cmd msg )
 initModel =
-    Cell.initModel
+    Cell.initModel ! []
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
     case msg of
-        Tick ->
-            Cell.updateModel model
+        Tick time ->
+            Cell.updateModel model ! []
 
 
 view : Model -> Html Msg
 view model =
     div []
-        [ button [ onClick Tick ] [ Html.text "Tick" ]
+        [ button [ onClick (Tick 0) ] [ Html.text "Tick" ]
         , svg
             [ width "600", height "600" ]
             (List.map displayCell (Set.toList model.cells))
@@ -57,6 +59,11 @@ yOffset =
 xOffset : Int
 xOffset =
     200
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Time.every (100 * Time.millisecond) Tick
 
 
 displayCell : Position -> Svg msg
