@@ -2,6 +2,7 @@ module Cell exposing (..)
 
 import Set exposing (Set)
 import CellInit exposing (cells, altCells)
+import SetExtras exposing (setFilterMap, setConcatMap)
 
 
 type alias Position =
@@ -10,7 +11,6 @@ type alias Position =
 
 
 -- Cell as position with neighbourCount?
--- Use Set functions instead of converting
 
 
 type alias Model =
@@ -29,14 +29,14 @@ updateModel model =
 
 updatePositions : Set Position -> Set Position
 updatePositions cells =
-    positionsToCheck (Set.toList cells)
-        |> List.filterMap (\position -> updatePosition cells position)
-        |> Set.fromList
+    positionsToCheck cells
+        |> setFilterMap (\position -> (updatePosition cells position))
 
 
-positionsToCheck : List Position -> List Position
+positionsToCheck : Set Position -> Set Position
 positionsToCheck cells =
-    cells ++ List.concatMap possibleNeighbours cells
+    setConcatMap possibleNeighbours cells
+        |> Set.union cells
 
 
 updatePosition : Set Position -> Position -> Maybe Position
@@ -57,22 +57,23 @@ updatePosition cells position =
 
 neighbours : Set Position -> Position -> Set Position
 neighbours cells position =
-    possibleNeighbours position
-        |> Set.fromList
+    position
+        |> possibleNeighbours
         |> Set.filter (isCellAt cells)
 
 
-possibleNeighbours : Position -> List Position
+possibleNeighbours : Position -> Set Position
 possibleNeighbours position =
-    [ position `addPosition` ( -1, 1 )
-    , position `addPosition` ( -1, 0 )
-    , position `addPosition` ( -1, -1 )
-    , position `addPosition` ( 0, 1 )
-    , position `addPosition` ( 0, -1 )
-    , position `addPosition` ( 1, 1 )
-    , position `addPosition` ( 1, 0 )
-    , position `addPosition` ( 1, -1 )
-    ]
+    Set.fromList
+        [ position `addPosition` ( -1, 1 )
+        , position `addPosition` ( -1, 0 )
+        , position `addPosition` ( -1, -1 )
+        , position `addPosition` ( 0, 1 )
+        , position `addPosition` ( 0, -1 )
+        , position `addPosition` ( 1, 1 )
+        , position `addPosition` ( 1, 0 )
+        , position `addPosition` ( 1, -1 )
+        ]
 
 
 addPosition : Position -> Position -> Position
