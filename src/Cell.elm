@@ -36,7 +36,7 @@ updatePositions cells =
 
 positionsToCheck : List Position -> List Position
 positionsToCheck cells =
-    unique (cells ++ List.concatMap possibleNeighbours cells)
+    cells ++ List.concatMap possibleNeighbours cells
 
 
 unique : List comparable -> List comparable
@@ -50,7 +50,7 @@ updatePosition : Set Position -> Position -> Maybe Position
 updatePosition cells position =
     let
         neighbourCount =
-            List.length (neighbours cells position)
+            Set.size (neighbours cells position)
     in
         if neighbourCount < 2 then
             Nothing
@@ -62,9 +62,9 @@ updatePosition cells position =
             Nothing
 
 
-neighbours : Set Position -> Position -> List Position
+neighbours : Set Position -> Position -> Set Position
 neighbours cells position =
-    List.filter (isCellAt cells) (possibleNeighbours position)
+    Set.filter (isCellAt cells) (Set.fromList (possibleNeighbours position))
 
 
 possibleNeighbours : Position -> List Position
