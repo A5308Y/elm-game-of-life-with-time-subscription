@@ -1,6 +1,7 @@
 module Cell exposing (..)
 
 import Set exposing (Set)
+import CellInit exposing (cells)
 
 
 type alias Position =
@@ -18,6 +19,11 @@ type alias NeighbourCount =
 
 type alias Model =
     { cells : Set Position }
+
+
+initModel : Model
+initModel =
+    { cells = Set.fromList CellInit.cells }
 
 
 updateModel : Model -> Model
