@@ -4,7 +4,6 @@ import Cell exposing (..)
 import Set
 import Html exposing (button, text, div, Html)
 import Html.Events exposing (..)
-import Html.App as Html
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 import Time exposing (Time)
@@ -14,7 +13,6 @@ type Msg
     = Tick Time
 
 
-main : Program Never
 main =
     Html.program
         { init = initModel
@@ -63,14 +61,14 @@ xOffset =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Time.every (100 * Time.millisecond) Tick
+    Time.every (10 * Time.millisecond) Tick
 
 
 displayCell : Position -> Svg msg
 displayCell cell =
     rect
-        [ x (toString (xOffset + fst cell * cellSize))
-        , y (toString (yOffset + snd cell * cellSize))
+        [ x (toString (xOffset + Tuple.first cell * cellSize))
+        , y (toString (yOffset + Tuple.second cell * cellSize))
         , width (toString cellSize)
         , height (toString cellSize)
         ]

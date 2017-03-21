@@ -1,7 +1,7 @@
 module Cell exposing (..)
 
 import Set exposing (Set)
-import CellInit exposing (cells, altCells)
+import CellInit exposing (cells, altCells, acorn)
 import SetExtras exposing (setFilterMap, setConcatMap)
 
 
@@ -19,7 +19,7 @@ type alias Model =
 
 initModel : Model
 initModel =
-    { cells = Set.fromList CellInit.altCells }
+    { cells = Set.fromList CellInit.acorn }
 
 
 updateModel : Model -> Model
@@ -65,20 +65,20 @@ neighbours cells position =
 possibleNeighbours : Position -> Set Position
 possibleNeighbours position =
     Set.fromList
-        [ position `addPosition` ( -1, 1 )
-        , position `addPosition` ( -1, 0 )
-        , position `addPosition` ( -1, -1 )
-        , position `addPosition` ( 0, 1 )
-        , position `addPosition` ( 0, -1 )
-        , position `addPosition` ( 1, 1 )
-        , position `addPosition` ( 1, 0 )
-        , position `addPosition` ( 1, -1 )
+        [ addPosition position ( -1, 1 )
+        , addPosition position ( -1, 0 )
+        , addPosition position ( -1, -1 )
+        , addPosition position ( 0, 1 )
+        , addPosition position ( 0, -1 )
+        , addPosition position ( 1, 1 )
+        , addPosition position ( 1, 0 )
+        , addPosition position ( 1, -1 )
         ]
 
 
 addPosition : Position -> Position -> Position
 addPosition leftPosition rightPosition =
-    ( fst leftPosition + fst rightPosition, snd leftPosition + snd rightPosition )
+    ( Tuple.first leftPosition + Tuple.first rightPosition, Tuple.second leftPosition + Tuple.second rightPosition )
 
 
 isCellAt : Set Position -> Position -> Bool

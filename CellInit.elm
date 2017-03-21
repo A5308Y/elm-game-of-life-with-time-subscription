@@ -1,4 +1,4 @@
-module CellInit exposing (cells, altCells)
+module CellInit exposing (..)
 
 
 cells : List ( Int, Int )
@@ -106,4 +106,16 @@ altCells =
     , ( 9, 16 )
     , ( 9, 18 )
     , ( 9, 20 )
+    ]
+
+
+acorn : List ( Int, Int )
+acorn =
+    [ ( 0, 0 )
+    , ( 1, 0 )
+    , ( 1, 2 )
+    , ( 3, 1 )
+    , ( 4, 0 )
+    , ( 5, 0 )
+    , ( 6, 0 )
     ]
